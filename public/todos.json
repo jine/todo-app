@@ -1,0 +1,17 @@
+[
+  {
+    "id": "1",
+    "text": "Learn TypeScript",
+    "completed": true
+  },
+  {
+    "id": "2",
+    "text": "Build a todo app",
+    "completed": false
+  },
+  {
+    "id": "3",
+    "text": "Deploy to production",
+    "completed": false
+  }
+]
