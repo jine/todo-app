@@ -6,12 +6,15 @@
   },
   {
     "id": "2",
-    "text": "Build a todo app",
-    "completed": false
+    "text": "Build a todo app"
   },
   {
     "id": "3",
-    "text": "Deploy to production",
-    "completed": false
+    "text": "Save to localStorage"
+  },
+  {
+    "id": "4",
+    "text": "Refactor into \"by-type\" structure",
+    "completed": true
   }
 ]

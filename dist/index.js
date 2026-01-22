@@ -1,4 +1,3 @@
-"use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -8,32 +7,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+import { renderTodos } from './components/TodoList.js';
+import { getTodos, addTodo } from './services/TodoService.js';
+import { saveTodos, clearTodos } from './utils/storage.js';
 // Start with an empty array of todos
 let todos = [];
 // App-container
 const container = document.getElementById("app");
-// Fetch placeholder todos from the JSON file
-function fetchTodos() {
-    return __awaiter(this, void 0, void 0, function* () {
-        const response = yield fetch('./todos.json');
-        const data = yield response.json();
-        return data;
-    });
-}
-// Add a new todo item to the list
-function addTodo(addText) {
-    //todos.push({ id: Date.now(), text: addText}); // ID becomes a unixtimestamp in ms
-    todos.push({ id: crypto.randomUUID(), text: addText });
-}
-// Save the current todos array to localStorage
-function saveTodos() {
-    localStorage.setItem("todos", JSON.stringify(todos));
-}
-// Clear all saved todos by clearing localStorage
-function clearTodos() {
-    //localStorage.setItem("todos", JSON.stringify([]));
-    localStorage.clear();
-}
 // Listen for clicks on the app container to handle todo row interactions
 if (container) {
     container.addEventListener("click", (event) => {
@@ -49,49 +29,22 @@ if (container) {
             toggleCompleted(datasetId);
     });
 }
-// Render the todo list in the DOM
-function renderTodos() {
-    const todoList = document.createElement("ul");
-    todoList.classList.add("space-y-2");
-    todos.forEach(({ id, text, completed }) => {
-        const aTodo = document.createElement("li");
-        aTodo.className = "p-2 bg-gray-700 rounded border border-gray-600 flex justify-between items-center cursor-pointer";
-        // Store the todo id in the element's dataset
-        aTodo.dataset.id = id; // .toString() Not needed, all IDs are strings
-        const textSpan = document.createElement("span");
-        textSpan.textContent = text;
-        // Apply strikethrough and gray color if completed
-        if (completed) {
-            textSpan.style.textDecoration = "line-through";
-            textSpan.classList.add("text-gray-400");
-        }
-        aTodo.appendChild(textSpan);
-        // Add an button per row
-        //const button = document.createElement("button");
-        //button.innerHTML = '<i class="fas fa-times"></i>';
-        //button.className = "text-red-400 hover:text-red-600";
-        //button.addEventListener("click", () => toggleCompleted(todo.id));
-        //li.appendChild(button);
-        todoList.appendChild(aTodo);
-    });
-    if (container) {
-        container.innerHTML = "";
-        container.appendChild(todoList);
-    }
-}
-// Toggle the completed status of a todo by id
+/**
+ * Toggle the completed status of a todo by id.
+ * @param id - The id of the todo to toggle
+ */
 function toggleCompleted(id) {
     const todo = todos.find((target) => target.id === id);
     if (todo) {
         // Toggle the completed boolean
         todo.completed = !todo.completed;
-        saveTodos();
-        renderTodos();
+        saveTodos(todos);
+        renderTodos(todos, container);
     }
 }
 // Initialize todos on page load: load placeholders and merge saved states 
 window.addEventListener("load", () => __awaiter(void 0, void 0, void 0, function* () {
-    todos = yield fetchTodos();
+    todos = yield getTodos();
     const stored = localStorage.getItem("todos");
     if (stored) {
         const savedTodos = JSON.parse(stored);
@@ -107,7 +60,7 @@ window.addEventListener("load", () => __awaiter(void 0, void 0, void 0, function
         });
     }
     // When we've fetched
-    renderTodos();
+    renderTodos(todos, container);
 }));
 // Handle form submission to add a new todo
 const form = document.getElementById("addForm");
@@ -116,9 +69,9 @@ form.addEventListener("submit", (event) => {
     const addInput = document.getElementById("addInput");
     const text = addInput.value.trim();
     if (text) {
-        addTodo(text);
-        saveTodos();
-        renderTodos();
+        addTodo(todos, text);
+        saveTodos(todos);
+        renderTodos(todos, container);
         addInput.value = "";
     }
 });

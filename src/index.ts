@@ -1,38 +1,13 @@
-interface Todo {
-	id: string;
-	text: string;
-	completed?: boolean;
-}
+import { Todo } from './models/Todo.js';
+import { renderTodos } from './components/TodoList.js';
+import { getTodos, addTodo } from './services/TodoService.js';
+import { saveTodos, clearTodos } from './utils/storage.js';
 
 // Start with an empty array of todos
 let todos: Todo[] = [];
 
 // App-container
 const container = document.getElementById("app") as HTMLElement;
-
-// Fetch placeholder todos from the JSON file
-async function fetchTodos(): Promise<Todo[]> {
-	const response = await fetch('./todos.json');
-	const data = await response.json();
-	return data;
-}
-
-// Add a new todo item to the list
-function addTodo(addText: string): void {
-	//todos.push({ id: Date.now(), text: addText}); // ID becomes a unixtimestamp in ms
-	todos.push({ id: crypto.randomUUID(), text: addText});
-}
-
-// Save the current todos array to localStorage
-function saveTodos(): void {
-	localStorage.setItem("todos", JSON.stringify(todos));
-}
-
-// Clear all saved todos by clearing localStorage
-function clearTodos(): void {
-    //localStorage.setItem("todos", JSON.stringify([]));
-	localStorage.clear();
-}
 
 // Listen for clicks on the app container to handle todo row interactions
 if(container) {
@@ -53,60 +28,24 @@ if(container) {
 	});
 }
 
-// Render the todo list in the DOM
-function renderTodos(): void {
-	const todoList = document.createElement("ul");
-	todoList.classList.add("space-y-2");
-
-	todos.forEach(({id, text, completed}) => {
-		const aTodo = document.createElement("li");
-		aTodo.className = "p-2 bg-gray-700 rounded border border-gray-600 flex justify-between items-center cursor-pointer";
-
-		// Store the todo id in the element's dataset
-		aTodo.dataset.id = id; // .toString() Not needed, all IDs are strings
-
-		const textSpan = document.createElement("span");
-		textSpan.textContent = text;
-
-		// Apply strikethrough and gray color if completed
-		if (completed) {
-			textSpan.style.textDecoration = "line-through";
-			textSpan.classList.add("text-gray-400");
-		}
-
-		aTodo.appendChild(textSpan);
-
-		// Add an button per row
-		//const button = document.createElement("button");
-		//button.innerHTML = '<i class="fas fa-times"></i>';
-		//button.className = "text-red-400 hover:text-red-600";
-		//button.addEventListener("click", () => toggleCompleted(todo.id));
-		//li.appendChild(button);
-
-		todoList.appendChild(aTodo);
-	});
-
-	if (container) {
-		container.innerHTML = "";
-		container.appendChild(todoList);
-	}
-}
-
-// Toggle the completed status of a todo by id
+/**
+ * Toggle the completed status of a todo by id.
+ * @param id - The id of the todo to toggle
+ */
 function toggleCompleted(id: string): void {
 	const todo = todos.find((target) => target.id === id);
 
 	if (todo) {
 		// Toggle the completed boolean
 		todo.completed = !todo.completed;
-		saveTodos();
-		renderTodos();
+		saveTodos(todos);
+		renderTodos(todos, container);
 	}
 }
 
 // Initialize todos on page load: load placeholders and merge saved states 
 window.addEventListener("load", async () => {
-	todos = await fetchTodos();
+	todos = await getTodos();
 
 	const stored = localStorage.getItem("todos");
 
@@ -126,7 +65,7 @@ window.addEventListener("load", async () => {
 	}
 
 	// When we've fetched
-	renderTodos();
+	renderTodos(todos, container);
 });
 
 // Handle form submission to add a new todo
@@ -139,9 +78,9 @@ form.addEventListener("submit", (event) => {
 	const text = addInput.value.trim();
 
 	if (text) {
-		addTodo(text);
-		saveTodos();
-		renderTodos();
+		addTodo(todos, text);
+		saveTodos(todos);
+		renderTodos(todos, container);
 		addInput.value = "";
 	}
 });
