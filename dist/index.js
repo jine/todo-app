@@ -29,7 +29,7 @@ function addTodo(addText) {
 function saveTodos() {
     localStorage.setItem("todos", JSON.stringify(todos));
 }
-// Clear all saved todos by setting localStorage to an empty array
+// Clear all saved todos by clearing localStorage
 function clearTodos() {
     //localStorage.setItem("todos", JSON.stringify([]));
     localStorage.clear();
@@ -51,13 +51,13 @@ if (container) {
 }
 // Render the todo list in the DOM
 function renderTodos() {
-    const list = document.createElement("ul");
-    list.classList.add("space-y-2");
+    const todoList = document.createElement("ul");
+    todoList.classList.add("space-y-2");
     todos.forEach(({ id, text, completed }) => {
-        const li = document.createElement("li");
-        li.className = "p-2 bg-gray-700 rounded border border-gray-600 flex justify-between items-center cursor-pointer";
+        const aTodo = document.createElement("li");
+        aTodo.className = "p-2 bg-gray-700 rounded border border-gray-600 flex justify-between items-center cursor-pointer";
         // Store the todo id in the element's dataset
-        li.dataset.id = id.toString();
+        aTodo.dataset.id = id; // .toString() Not needed, all IDs are strings
         const textSpan = document.createElement("span");
         textSpan.textContent = text;
         // Apply strikethrough and gray color if completed
@@ -65,18 +65,18 @@ function renderTodos() {
             textSpan.style.textDecoration = "line-through";
             textSpan.classList.add("text-gray-400");
         }
-        li.appendChild(textSpan);
+        aTodo.appendChild(textSpan);
         // Add an button per row
         //const button = document.createElement("button");
         //button.innerHTML = '<i class="fas fa-times"></i>';
         //button.className = "text-red-400 hover:text-red-600";
         //button.addEventListener("click", () => toggleCompleted(todo.id));
         //li.appendChild(button);
-        list.appendChild(li);
+        todoList.appendChild(aTodo);
     });
     if (container) {
         container.innerHTML = "";
-        container.appendChild(list);
+        container.appendChild(todoList);
     }
 }
 // Toggle the completed status of a todo by id
@@ -89,7 +89,7 @@ function toggleCompleted(id) {
         renderTodos();
     }
 }
-// Initialize todos on page load: load placeholders and merge saved states
+// Initialize todos on page load: load placeholders and merge saved states 
 window.addEventListener("load", () => __awaiter(void 0, void 0, void 0, function* () {
     todos = yield fetchTodos();
     const stored = localStorage.getItem("todos");
