@@ -55,7 +55,7 @@ function renderTodos() {
     list.classList.add("space-y-2");
     todos.forEach(({ id, text, completed }) => {
         const li = document.createElement("li");
-        li.className = "p-2 bg-gray-700 rounded border border-gray-600 flex justify-between items-center";
+        li.className = "p-2 bg-gray-700 rounded border border-gray-600 flex justify-between items-center cursor-pointer";
         // Store the todo id in the element's dataset
         li.dataset.id = id.toString();
         const textSpan = document.createElement("span");
