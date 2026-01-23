@@ -24,6 +24,9 @@ export function getTodos() {
  * @param addText - The text for the new todo
  */
 export function addTodo(todos, addText) {
+    // Set minimum length, this is validated via HTML too, but still
+    if (addText.length < 5)
+        alert('Minst 10 tecken!');
     //todos.push({ id: Date.now(), text: addText}); // Use unixtimestamp in ms as id
     todos.push({ id: crypto.randomUUID(), text: addText });
 }

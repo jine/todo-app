@@ -1,4 +1,4 @@
-import { Todo } from '../models/Todo.js';
+import type { Todo } from '../models/Todo.js';
 
 // Files that interact with the storage of todos (towards database / localStorage)
 

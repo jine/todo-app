@@ -8,7 +8,7 @@ export function renderTodos(todos, container) {
     todoList.classList.add("space-y-2"); // space on y axis
     todos.forEach(({ id, text, completed }) => {
         const aTodo = document.createElement("li");
-        aTodo.className = "p-2 bg-gray-700 rounded border border-gray-600 flex justify-between items-center cursor-pointer";
+        aTodo.className = "flex items-center justify-between p-2 bg-gray-700 border border-gray-600 cursor-pointer rounded";
         // Store the todo id in the element's dataset
         aTodo.dataset.id = id; // .toString() Not needed, all IDs are strings
         const textSpan = document.createElement("span");
@@ -21,7 +21,7 @@ export function renderTodos(todos, container) {
         aTodo.appendChild(textSpan);
         // Add an button per row
         //const button = document.createElement("button");
-        //button.innerHTML = '<i class="fas fa-times"></i>';
+        //button.innerHTML = '<i class="fa-times fas"></i>';
         //button.className = "text-red-400 hover:text-red-600";
         //button.addEventListener("click", () => toggleCompleted(todo.id));
         //li.appendChild(button);

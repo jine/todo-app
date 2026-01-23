@@ -1,4 +1,4 @@
-import { Todo } from './models/Todo.js';
+import type { Todo } from './models/Todo.js';
 import { renderTodos } from './components/TodoList.js';
 import { getTodos, addTodo } from './services/TodoService.js';
 import { saveTodos, clearTodos } from './utils/storage.js';

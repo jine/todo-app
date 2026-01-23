@@ -29,19 +29,6 @@ if (container) {
             toggleCompleted(datasetId);
     });
 }
-/**
- * Toggle the completed status of a todo by id.
- * @param id - The id of the todo to toggle
- */
-function toggleCompleted(id) {
-    const todo = todos.find((target) => target.id === id);
-    if (todo) {
-        // Toggle the completed boolean
-        todo.completed = !todo.completed;
-        saveTodos(todos);
-        renderTodos(todos, container);
-    }
-}
 // Initialize todos on page load: load placeholders and merge saved states 
 window.addEventListener("load", () => __awaiter(void 0, void 0, void 0, function* () {
     todos = yield getTodos();
@@ -75,6 +62,19 @@ form.addEventListener("submit", (event) => {
         addInput.value = "";
     }
 });
+/**
+ * Toggle the completed status of a todo by id.
+ * @param id - The id of the todo to toggle
+ */
+function toggleCompleted(id) {
+    const todo = todos.find((target) => target.id === id);
+    if (todo) {
+        // Toggle the completed boolean
+        todo.completed = !todo.completed;
+        saveTodos(todos);
+        renderTodos(todos, container);
+    }
+}
 // Handle clear button click to reset todos
 const clearBtn = document.getElementById("clearBtn");
 clearBtn.addEventListener("click", () => {

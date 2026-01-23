@@ -1,4 +1,4 @@
-import { Todo } from '../models/Todo.js';
+import type { Todo } from '../models/Todo.js';
 
 /**
  * Renders the todo list in the DOM. JSDoc is really helpful :D
@@ -11,7 +11,7 @@ export function renderTodos(todos: Todo[], container: HTMLElement): void {
 
 	todos.forEach(({id, text, completed}) => {
 		const aTodo = document.createElement("li");
-		aTodo.className = "p-2 bg-gray-700 rounded border border-gray-600 flex justify-between items-center cursor-pointer";
+		aTodo.className = "flex items-center justify-between p-2 bg-gray-700 border border-gray-600 cursor-pointer rounded";
 
 		// Store the todo id in the element's dataset
 		aTodo.dataset.id = id; // .toString() Not needed, all IDs are strings
@@ -29,7 +29,7 @@ export function renderTodos(todos: Todo[], container: HTMLElement): void {
 
 		// Add an button per row
 		//const button = document.createElement("button");
-		//button.innerHTML = '<i class="fas fa-times"></i>';
+		//button.innerHTML = '<i class="fa-times fas"></i>';
 		//button.className = "text-red-400 hover:text-red-600";
 		//button.addEventListener("click", () => toggleCompleted(todo.id));
 		//li.appendChild(button);
