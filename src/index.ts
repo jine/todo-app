@@ -28,21 +28,6 @@ if(container) {
 	});
 }
 
-/**
- * Toggle the completed status of a todo by id.
- * @param id - The id of the todo to toggle
- */
-function toggleCompleted(id: string): void {
-	const todo = todos.find((target) => target.id === id);
-
-	if (todo) {
-		// Toggle the completed boolean
-		todo.completed = !todo.completed;
-		saveTodos(todos);
-		renderTodos(todos, container);
-	}
-}
-
 // Initialize todos on page load: load placeholders and merge saved states 
 window.addEventListener("load", async () => {
 	todos = await getTodos();
@@ -70,7 +55,6 @@ window.addEventListener("load", async () => {
 
 // Handle form submission to add a new todo
 const form = document.getElementById("addForm") as HTMLFormElement;
-
 form.addEventListener("submit", (event) => {
 	event.preventDefault();
 
@@ -85,6 +69,20 @@ form.addEventListener("submit", (event) => {
 	}
 });
 
+/**
+ * Toggle the completed status of a todo by id.
+ * @param id - The id of the todo to toggle
+ */
+function toggleCompleted(id: string): void {
+    const todo = todos.find((target) => target.id === id);
+
+    if (todo) {
+        // Toggle the completed boolean
+        todo.completed = !todo.completed;
+        saveTodos(todos);
+        renderTodos(todos, container);
+    }
+}
 // Handle clear button click to reset todos
 const clearBtn = document.getElementById("clearBtn") as HTMLButtonElement;
 

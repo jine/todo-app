@@ -1,5 +1,7 @@
 import { Todo } from '../models/Todo.js';
 
+// Files that interact with the storage of todos (towards database / localStorage)
+
 /**
  * Save the current todos array to localStorage.
  * @param todos - The array of todos to save
